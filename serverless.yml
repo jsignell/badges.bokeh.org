@@ -1,0 +1,28 @@
+service: bokeh-badges
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: prod
+  timeout: 15
+  memorySize: 128
+  iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - s3:*
+      - ssm:GetParameter
+      - ssm:GetParameters
+    Resource:
+      - arn:aws:s3:::badges.bokeh.org
+      - arn:aws:s3:::badges.bokeh.org/*
+      - arn:aws:ssm:us-east-1:*:parameter/bokeh-docs-google-cloud-credentials
+
+functions:
+  badge:
+    handler: handler.badge
+    events:
+      # 1am every morning
+      - schedule: cron(0 1 * * ? *)
+
+plugins:
+  - serverless-python-requirements
