@@ -32,6 +32,10 @@ import requests
 
 AWS_BUCKET_NAME = "badges.bokeh.org"
 
+AWS_HEADERS = {
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+}
+
 BADGE_URL = "https://img.shields.io/badge/downloads-%0.2fk%%2Fmonth-brightgreen.svg"
 
 PIP_BADGE_FILE_NAME = "pip-downloads-30-day.svg"
@@ -83,6 +87,7 @@ def badge(event, context):
         ContentType='image/svg+xml',
         Key=PIP_BADGE_FILE_NAME,
         Body=badge_data,
+        Metadata=AWS_HEADERS,
     )
 
     # -- return -----------------------
