@@ -1,21 +1,19 @@
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Copyright (c) 2012 - 2018, Anaconda, Inc., and Bokeh Contributors.
 # All rights reserved.
 #
 # The full license is in the file LICENSE.txt, distributed with this software.
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 ''' Generate and publish badges bokeh related statistics.
 
 '''
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Imports
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 # Standard library imports
-import os
 import json
-from subprocess import check_output
 
 # External imports
 from google.cloud import bigquery as bq
@@ -26,13 +24,14 @@ import requests
 
 # Bokeh imports
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Globals and constants
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 AWS_BUCKET_NAME = "badges.bokeh.org"
 
 AWS_HEADERS = {
+    'Content-Type': 'image/svg+xml',
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
 }
 
@@ -51,9 +50,10 @@ WHERE file.project = 'bokeh'
 LIMIT 100
 """
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Public API
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
 
 def badge(event, context):
 
@@ -85,9 +85,9 @@ def badge(event, context):
 
     result = bucket.put_object(
         ContentType='image/svg+xml',
+        CacheControl='no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
         Key=PIP_BADGE_FILE_NAME,
         Body=badge_data,
-        Metadata=AWS_HEADERS,
     )
 
     # -- return -----------------------
