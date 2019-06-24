@@ -1,3 +1,7 @@
 boto3
+fastparquet
 google-cloud-bigquery
+intake
+intake-parquet
 requests
+s3fs
